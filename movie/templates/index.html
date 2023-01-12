@@ -122,23 +122,23 @@
                      let star = rows[i]["star"];
                      let desc = rows[i]["desc"];
                      let star_image = "⭐".repeat(star);
+                     let card_num = rows[i]["card_num"];
 
                      let temp_html = `<div class="col">
-            <div class="card h-100">
-                <img src="${image}"
-                     class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">${title}</h5>
-                    <p class="card-text">${desc}</p>
-                    <p>${star_image}</p>
-                    <p class="mycomment">${comment}</p>
-                </div>
-            </div>
-        </div>`;
+             <div class="card h-100">
+                 <img src="${image}"
+                      class="card-img-top">
+                 <div class="card-body">
+                     <h5 class="card-title">${title}</h5>
+                     <p class="card-text">${desc}</p>
+                     <p>${star_image}</p>
+                     <p class="mycomment">${comment}</p>
+                     <button type="button" class="btn-dark delete_button" onClick="delete_card(${card_num})">삭제!</button>
+                 </div>
+             </div>
+         </div>`;
                      $("#cards-box").append(temp_html);
                   }
-
-                  console.log(response["movies"]);
                },
             });
          }
@@ -150,8 +150,20 @@
 
             $.ajax({
                type: "POST",
-               url: "/movie",
+               url: "/record",
                data: { url_give: url, star_give: star, comment_give: comment },
+               success: function (response) {
+                  alert(response["msg"]);
+                  window.location.reload();
+               },
+            });
+         }
+
+         function delete_card(card_num) {
+            $.ajax({
+               type: "POST",
+               url: "/movie/delete",
+               data: { card_num_give: card_num },
                success: function (response) {
                   alert(response["msg"]);
                   window.location.reload();
